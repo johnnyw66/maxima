@@ -60,3 +60,8 @@ http://localhost:5050
 
 This interface allows you to generate and view plots dynamically. Ensure that port 5050 is not blocked by your firewall or in use by another application.
 
+![Maxima Web Service](/images/web01.png)
+
+![Maxima Web Service](/images/web02.png)
+
+
