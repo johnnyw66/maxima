@@ -1,0 +1,50 @@
+FROM debian:bookworm-slim
+
+# Make sure we don't get notifications we can't answer during building.
+ENV DEBIAN_FRONTEND noninteractive
+
+LABEL maintainer="Jonathan Goldfarb <jgoldfar@gmail.com>"
+
+RUN apt-get update && \
+    apt-get upgrade -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" && \
+    apt-get -q -y --no-install-recommends install\
+    curl\
+    make\
+    git\
+    vim\
+    ca-certificates\
+    texinfo\
+    python3\
+    python3-flask\
+    gnuplot\
+    sbcl\
+    autoconf\
+    automake
+
+RUN python3 -c "from flask import Flask; print('Flask is installed')"
+
+
+ENV MaximaPath=/opt/maxima
+
+RUN mkdir -p ${MaximaPath} && \
+    git clone https://git.code.sf.net/p/maxima/code ${MaximaPath} && \
+    cd ${MaximaPath} && \
+    ./bootstrap && \
+    ./configure --enable-sbcl --prefix=/usr/local --enable-quiet-build && \
+    make install && \
+    rm -rf ${MaximaPath} && \
+    apt-get -q -y remove autoconf automake make vim git curl && \
+    apt-get -q -y clean && \
+    apt-get -q -y autoclean && \
+    rm -rf /var/lib/apt/lists/* /var/log/dpkg.log
+
+# Create a basic Maxima web server script
+WORKDIR /app
+COPY maxima_web.py .
+
+# Expose the web server port
+EXPOSE 5000
+
+# Run the web server on container start
+CMD ["python3", "/app/maxima_web.py"]
+
