@@ -50,5 +50,13 @@ docker run -p 5050:5000 -v $(pwd):/app -it maxima-web
 
 Plots will be timestamped and saved in the **static/plots** directory, which is created automatically when you run the plotting version.
 
+### Accessing the Plotting Web Interface
 
+Once the container is running with 2D plotting enabled, you can access the web interface by opening a browser and navigating to:
+
+```
+http://localhost:5050
+```
+
+This interface allows you to generate and view plots dynamically. Ensure that port 5050 is not blocked by your firewall or in use by another application.
 
