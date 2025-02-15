@@ -3,7 +3,7 @@
 Running Maxima inside a Docker container is a convenient alternative to installing it directly via Homebrew or MacPorts on macOS. This approach ensures Maxima runs in a controlled environment without conflicting with system dependencies. A prebuilt Maxima image can be found on Docker Hub, or you can create a custom image using the provided `Dockerfile`, which installs Maxima from a package manager like APT (for Debian-based images) or compiles it from source. Running Maxima in a container allows for easy version management, sandboxed execution, and cross-platform compatibility without modifying the host system.
 
 ## *** UPDATE *** Now you can run Maxima on your Raspberry Pi
-After cloning the directory using the instructions below  - simply copy **Dockerfile.RPI** over the existing **Dockerfile**
+After cloning the directory using the instructions below  - simply copy **Dockerfile.RPI** over the existing **Dockerfile**.
 With the new Dockerfile in place - you then run the one off **docker build** command.
 
 ## Running Maxima in a Docker Container with 2D Plotting Support
