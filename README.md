@@ -68,4 +68,13 @@ This interface allows you to generate and view plots dynamically. Ensure that po
 
 ![Maxima Web Service](/images/web02.png)
 
+### Simple CLI (cli.py)
+
+Once you have a local **maxima** webservice running you can run maxima commands by running the Python script **cli.py**
+
+```sh
+python3 cli.py
+```
+
+The script assumes you are running a local **maxima-web** Docker container (change the **url** variable in the script to match your host).
 
