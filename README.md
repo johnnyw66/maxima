@@ -78,3 +78,6 @@ python3 cli.py
 
 The script assumes you are running a local **maxima-web** Docker container (change the **url** variable in the script to match your host).
 
+![Maxima CLI Screenshot example](/images/cli.png)
+
+
