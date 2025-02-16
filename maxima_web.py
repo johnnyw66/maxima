@@ -25,7 +25,7 @@ def welcome():
     <html>
         <head><title>plot2d Maxima Web Interface</title></head>
         <body>
-            <h1>Welcome to Maxima plot2d Web Interface</h1>
+            <h1>Maxima plot2d Web Interface</h1>
             <p>This is a simple web service to run plot2d Maxima commands and generate plots.</p>
 
             <h2>Enter a Maxima plot command:</h2>
@@ -46,7 +46,7 @@ def welcome():
 
             <h2>To use the Maxima API with curl:</h2>
             <pre>
-    curl -X POST http://localhost:5050/maxima -H "Content-Type: application/json" -d '{"command": "plot2d(sin(x), [x, -5, 5]);"}'
+    curl -X POST http://localhost:5050/maxima -H "Content-Type: application/json" -d '{"command": "diff(sin(x),x);"}'
             </pre>
         </body>
     </html>
@@ -104,7 +104,18 @@ def generate_plot():
         <a href="/">Back to Home</a>
     """, plot_url=plot_url)
 
-# Endpoint 
+# Endpoint to run Maxima commands via POST request
+@app.route("/maxima", methods=["POST"])
+def run_maxima():
+    command = request.json.get("command", "")
+    if not command:
+        return jsonify({"error": "No command provided"}), 400
+
+    result = subprocess.run(["maxima", "--very-quiet"], input=command, 
+                            text=True, capture_output=True)
+    return jsonify({"output": result.stdout})
+
+
 # Ensure the Flask app runs in the foreground
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
