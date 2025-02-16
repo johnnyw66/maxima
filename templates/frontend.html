@@ -1,0 +1,121 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maxima Web Console</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        #console {
+            width: 100%;
+            height: 300px;
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-family: monospace;
+            border-radius: 5px;
+            overflow-y: auto;
+        }
+        #commandInput {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #333;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        #submitBtn {
+            padding: 10px 20px;
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #submitBtn:hover {
+            background-color: #4cae4c;
+        }
+        #output {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            max-width: 100%;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Maxima Command Console</h1>
+    <div id="console"></div>
+    <textarea id="commandInput" placeholder="Enter Maxima command here..."></textarea><br>
+    <button id="submitBtn">Submit Command</button>
+
+    <div id="output"></div>
+
+    <script>
+
+        fetch('http://localhost:5050/start', { method: 'GET' })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.message);  // Session started or already running
+            })
+            .catch(error => {
+                console.log("Error starting session: ", error);
+            });
+
+
+        document.getElementById("submitBtn").addEventListener("click", function() {
+            let command = document.getElementById("commandInput").value;
+            let consoleDiv = document.getElementById("console");
+            let outputDiv = document.getElementById("output");
+
+            // Append the command to the console
+            consoleDiv.innerHTML += "> " + command + "\n";
+
+            // Clear the input field
+            document.getElementById("commandInput").value = "";
+
+            // Send the command to the backend via POST request
+            fetch('http://localhost:5050/execute', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials:'include',
+                body: JSON.stringify({ command: command })
+            })
+            .then(response => response.json())
+                .then(data => {
+                 let formattedOutput = data.output.replace(/\r\n/g, '<br>').replace(/ /g, '&nbsp;');
+
+                // Append the output to the console
+                    consoleDiv.innerHTML += formattedOutput + "\n";
+
+                // Display output in the output section
+                    outputDiv.innerHTML = "<strong>Result:</strong><br>" + formattedOutput;
+            })
+            .catch(error => {
+                consoleDiv.innerHTML += "Error: " + error + "\n";
+            });
+        });
+
+        // Allow user to press "Enter" to submit the command
+        document.getElementById("commandInput").addEventListener("keypress", function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById("submitBtn").click();
+            }
+        });
+    </script>
+
+</body>
+</html>

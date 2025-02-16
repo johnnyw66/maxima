@@ -1,4 +1,4 @@
-echo "running web service on http://localhost:5050"
+echo "running maxima cli"
 docker run -v $(pwd):/app -it  maxima-web maxima
 
 
