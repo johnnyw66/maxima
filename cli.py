@@ -1,7 +1,7 @@
 import requests
 import json
 
-# Simple Maxima CLI 
+# Simple Maxima CLI - Change url to match your maxima web host
 url = "http://localhost:5050/maxima"
 headers = {"Content-Type": "application/json"}
 
